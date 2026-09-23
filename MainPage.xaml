@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Harcama_Takip1"
+             xmlns:sys="clr-namespace:System;assembly=netstandard"
+             x:Class="Harcama_Takip1.MainPage"
+             Title="Harcama Takip Uygulaması"
+             BackgroundColor="White">
+
+    <!--Convert kaydı-->
+    <ContentPage.Resources>
+        <!--Sayfaya özel kaynak alanı-->
+        <ResourceDictionary>
+            <!--Kaynakların tutulduğu sözlük-->
+            <local:KatagoriColorConverter x:Key="KatagoriColorConvert"/>
+            <!--Veriyi dönüştürmek için tanımlanmış converter sınıfı-->
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <VerticalStackLayout>
+            <!--Harcama Ekleme Formu-->
+            <Label Text="Yeni Harcama Ekleyiniz" FontSize="18" FontAttributes="Bold" TextColor="#1E3A8A"/>
+            <Entry x:Name="TutarGirişi" Placeholder="Miktar (TL)" Keyboard="Numeric" BackgroundColor="White" TextColor="#1f2937" PlaceholderColor="#9CA3AF"/>
+            <Picker x:Name="KatagoriTürü" Title="Kategori Seçiniz" BackgroundColor="White" TextColor="#1F2937">
+                <Picker.Items>
+                    <x:String>Eğitim</x:String>
+                    <x:String>Eğlence</x:String>
+                    <x:String>Alışveriş</x:String>
+                    <x:String>Ulaşım</x:String>
+                    <x:String>Yiyecek</x:String>
+                    <x:String>Kira</x:String>
+                    <x:String>Tatil</x:String>
+                    <x:String>Fatura</x:String>
+                    <x:String>Sağlık</x:String>
+                    <x:String>İhtiyaçlar</x:String>
+                </Picker.Items>
+            </Picker>
+            <DatePicker x:Name="TarihSeçici" Date="{x:Static sys:DateTime.Now}" BackgroundColor="White" TextColor="#1f2937"/>
+            <Button Text="Ekle" Clicked="Button_Clicked" BackgroundColor="BurlyWood" TextColor="White" CornerRadius="8"/>
+            <!--Harcama Listesi-->
+            <Label Text="Harcamalar" FontSize="18" FontAttributes="Italic" Margin="0,20,0,0" TextColor="#1e3a8a"/>
+            <CollectionView x:Name="GiderlerListesi" ItemsSource="{Binding Giderler}" Margin="0.5">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="10"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame CornerRadius="10" Padding="10" HasShadow="False" BackgroundColor="{Binding Katagori, Converter={StaticResource KatagoriColorConvert}}" Margin="0,10,0,10">
+                            <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
+                                <!--Sol Taraf Bilgi-->
+                                <StackLayout Grid.Column="0" Orientation="Horizontal" Spacing="10">
+                                    <Label Text="{Binding Miktar, StringFormat='{0:C}'}" FontSize="16" TextColor="White"/>
+                                    <Label Text="{Binding Katagori}" FontSize="16" TextColor="White"/>
+                                    <Label Text="{Binding Tarih, StringFormat='{0:dd/MM/yyyy}'}" FontSize="16" TextColor="White"/>
+                                </StackLayout>
+                                <Button Grid.Column="1" Text="Sil" Clicked="DeleteButton_Clicked" BackgroundColor="Transparent" TextColor="White" FontAttributes="Bold"/>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <Label x:Name="ToplameEtiket" Text="Toplam: 0 TL" FontSize="16" FontAttributes="Italic" TextColor="#1E3A8A"/>
+
+            <!--Grafik-->
+            <Label Text="Harcama Grafiği" FontSize="18" FontAttributes="Bold" Margin="0,20,0,0" TextColor="#1E3A8A"/>
+            <VerticalStackLayout x:Name="GrafikKontrol" HeightRequest="200" BackgroundColor="#dbeafe"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
